@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlimited Chat - YES AI</title>
+    <style>
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        
+        /* 1. Animated Flowing Background Color */
+        body { 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 32px 20px; 
+            background: linear-gradient(135deg, #090d16, #0f172a, #1e1b4b, #090d16);
+            background-size: 400% 400%;
+            animation: bgGradientShift 12s ease infinite;
+            color: #f8fafc; 
+        }
+
+        @keyframes bgGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        main { width: 100%; max-width: 760px; margin: 0 auto; }
+        a { color: #93c5fd; }
+        
+        .top { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 48px; }
+        .top a { color: #cbd5e1; text-decoration: none; transition: color 0.3s; }
+        .top a:hover { color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6); }
+        
+        header { text-align: center; margin-bottom: 32px; }
+        
+        /* 2. Rolling Color Gradient Title */
+        h1 { 
+            margin-bottom: 12px; 
+            font-size: clamp(28px, 5vw, 40px);
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #f472b6, #38bdf8);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: titleColorFlow 6s linear infinite;
+        }
+
+        @keyframes titleColorFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        header p, .fine-print { color: #94a3b8; line-height: 1.6; }
+        
+        /* 3. Glowing & Hover-Elevating Pricing Card */
+        .plan { 
+            max-width: 440px; 
+            margin: 0 auto; 
+            padding: 30px; 
+            border: 2px solid rgba(56, 189, 248, 0.4); 
+            border-radius: 20px; 
+            background: rgba(19, 24, 38, 0.85); 
+            backdrop-filter: blur(12px);
+            text-align: center; 
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: cardGlowPulse 4s ease-in-out infinite alternate;
+        }
+
+        .plan:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(192, 132, 252, 0.8);
+            box-shadow: 0 0 40px rgba(192, 132, 252, 0.4), inset 0 0 15px rgba(192, 132, 252, 0.2);
+        }
+
+        @keyframes cardGlowPulse {
+            0% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.3); }
+            100% { box-shadow: 0 0 30px rgba(129, 140, 248, 0.4); border-color: rgba(129, 140, 248, 0.7); }
+        }
+
+        .price { margin: 12px 0; font-size: 44px; font-weight: 700; color: #38bdf8; text-shadow: 0 0 12px rgba(56, 189, 248, 0.4); }
+        .price span { color: #94a3b8; font-size: 15px; font-weight: 400; }
+        
+        .features { margin: 24px 0; padding: 0; list-style: none; color: #cbd5e1; line-height: 2; text-align: left; }
+        
+        /* 4. Glowing Neon Button with Smooth Transition */
+        button, .button { 
+            display: inline-block; 
+            width: 100%; 
+            padding: 14px; 
+            border: 2px solid transparent; 
+            border-radius: 12px; 
+            background: linear-gradient(135deg, #38bdf8, #6366f1); 
+            color: #fff; 
+            font-size: 15px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            cursor: pointer; 
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        button:hover, .button:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #6366f1, #c084fc);
+            box-shadow: 0 0 25px rgba(192, 132, 252, 0.8), 0 0 40px rgba(56, 189, 248, 0.6);
+        }
+
+        button:disabled { opacity: 0.6; cursor: wait; transform: none; box-shadow: none; }
+        
+        #planMessage { min-height: 24px; margin: 18px 0 0; color: #cbd5e1; }
+        .fine-print { margin-top: 20px; font-size: 12px; }
+        [hidden] { display: none !important; }
+    </style>
+</head>
+<body>
+    <main>
+        <nav class="top">
+            <a href="/chat.html">← Back to chat</a>
+          
+        </nav>
+        <header>
+            <h1>Unlimited GEMA AI Chat</h1>
+            <p>Pay once. No monthly or yearly renewal. Get unlimited chat access on your account.</p>
+        </header>
+        <section class="plan" aria-label="Lifetime unlimited chat offer">
+            <h2>Lifetime Chat Access</h2>
+            <p class="price">$10 <span>one-time</span></p>
+            <ul class="features">
+                <li>To get unlimited chat access</li>
+                <li>No recurring payments</li>
+                <li>Access stays on your account</li>
+            </ul>
+            <button type="button" id="purchaseButton" disabled>Loading account...</button>
+            <p id="planMessage" aria-live="polite"></p>
+            <p class="fine-print">Free accounts get 100 prompts every 72 hours. After a successful one-time payment, unlimited chat is enabled permanently.</p>
+        </section>
+    </main>
+    <script src="plans.js"></script>
+</body>
+</html>

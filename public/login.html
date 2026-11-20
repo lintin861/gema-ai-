@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - YES AI</title>
+    <style>
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { min-height: 100vh; display: grid; place-items: center; margin: 0; padding: 24px; background: #0b0e17 url("/images/account-background.svg") center / cover fixed; color: #f8fafc; }
+        main { width: 100%; max-width: 440px; padding: 28px; border: 1px solid rgba(255,255,255,.1); border-radius: 16px; background: rgba(19, 24, 38, .88); backdrop-filter: blur(12px); }
+        a { color: #93c5fd; }
+        h1 { margin: 24px 0 8px; font-size: 26px; }
+        p { color: #94a3b8; line-height: 1.5; }
+        form { display: grid; gap: 12px; margin-top: 20px; }
+        label { color: #cbd5e1; font-size: 14px; }
+        input { width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,.14); border-radius: 8px; background: rgba(11, 14, 23, .72); color: #f8fafc; font: inherit; }
+        button { padding: 13px; border: 0; border-radius: 8px; background: #3b82f6; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+        button:disabled { opacity: .6; cursor: wait; }
+        #accountMessage { min-height: 22px; margin-top: 14px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <main>
+        <a href="/">← YES AI Chat</a>
+        <h1>Sign in</h1>
+        <p>Continue chatting with YES AI.</p>
+        <form id="accountForm" data-action="login">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button type="submit">Sign in</button>
+        </form>
+        <p id="accountMessage" aria-live="polite"></p>
+        <p>New to YES AI? <a id="switchAccountLink" href="/signup.html">Create an account</a></p>
+    </main>
+    <script src="account.js"></script>
+</body>
+</html>

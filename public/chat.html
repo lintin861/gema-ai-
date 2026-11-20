@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEMA AI Chat</title>
+    
+    <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    
+    /* Lock body height and prevent whole-page scrolling */
+    body { 
+        height: 100vh; 
+        max-height: 100vh;
+        margin: 0; 
+        background: #0b0e17 url("/images/chat-background.svg") center / cover fixed; 
+        color: #f8fafc; 
+        overflow: hidden;
+    }
+
+    button, textarea { font: inherit; }
+    
+    .app { 
+        display: flex; 
+        flex-direction: column; 
+        height: 100vh; 
+        max-height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Bouncing & Fire-Flickering GEMA AI Logo with Shadow */
+.brand {
+    display: inline-block;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #fff7ed; /* Bright white-hot core */
+    
+    /* Fire glow text shadows shooting upwards */
+    text-shadow: 
+        0 0 4px #fff,
+        0 -4px 10px #fde047,   
+        0 -8px 18px #f97316,   
+        0 -14px 28px #ef4444,  
+        0 -20px 40px #991b1b;  
+
+    /* Dynamic drop shadow underneath that resizes and shifts as it bounces */
+    filter: drop-shadow(0 12px 6px rgba(0, 0, 0, 0.7));
+    animation: 
+        brandBounce 2s ease-in-out infinite,
+        fireFlicker 0.14s infinite alternate,
+        shadowPulse 2s ease-in-out infinite;
+}
+
+/* Smooth bouncing animation and synchronized shadow scaling */
+@keyframes brandBounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-5px) scale(1.04);
+    }
+}
+
+/* Shadow shrinks and blurs when the logo lifts up, creating realistic depth */
+@keyframes shadowPulse {
+    0%, 100% {
+        filter: drop-shadow(0 12px 6px rgba(0, 0, 0, 0.7));
+    }
+    50% {
+        filter: drop-shadow(0 18px 3px rgba(0, 0, 0, 0.35));
+    }
+}
+
+/* Rapid flickering fire aura rising upward */
+@keyframes fireFlicker {
+    0% {
+        text-shadow: 
+            0 0 4px #fff,
+            0 -3px 8px #fde047,
+            0 -7px 16px #f97316,
+            0 -12px 26px #ef4444,
+            0 -18px 36px #7f1d1d;
+    }
+    50% {
+        text-shadow: 
+            0 0 6px #fff,
+            0 -5px 12px #fef08a,
+            0 -10px 22px #fb923c,
+            0 -16px 32px #dc2626,
+            0 -24px 44px #991b1b;
+    }
+    100% {
+        text-shadow: 
+            0 0 3px #fff,
+            0 -4px 9px #facc15,
+            0 -9px 19px #ea580c,
+            0 -14px 29px #ef4444,
+            0 -21px 38px #7f1d1d;
+    }
+}
+
+    .topbar { display: flex; flex: 0 0 60px; align-items: center; justify-content: space-between; gap: 16px; padding: 0 24px; }
+/* Bouncing & Fire-Flickering GEMA AI Brand Logo */
+#upgradeLink{
+    display: inline-block;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #fff7ed; /* Bright white-hot core */
+    text-shadow: 
+        0 0 4px #fff,
+        0 -4px 10px #fde047,   /* Bright yellow inner flame */
+        0 -8px 18px #f97316,   /* Vibrant orange mid flame */
+        0 -14px 28px #ef4444,  /* Deep red outer blaze */
+        0 -20px 40px #991b1b;  /* Rising heat haze */
+    animation: 
+        brandBounce 2s ease-in-out infinite,
+        fireFlicker 0.14s infinite alternate;
+}
+
+/* Smooth gentle bounce animation */
+@keyframes brandBounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-4px) scale(1.04);
+    }
+}
+
+/* Rapid flickering fire aura rising upward */
+@keyframes fireFlicker {
+    0% {
+        text-shadow: 
+            0 0 4px #fff,
+            0 -3px 8px #fde047,
+            0 -7px 16px #f97316,
+            0 -12px 26px #ef4444,
+            0 -18px 36px #7f1d1d;
+    }
+    50% {
+        text-shadow: 
+            0 0 6px #fff,
+            0 -5px 12px #fef08a,
+            0 -10px 22px #fb923c,
+            0 -16px 32px #dc2626,
+            0 -24px 44px #991b1b;
+    }
+    100% {
+        text-shadow: 
+            0 0 3px #fff,
+            0 -4px 9px #facc15,
+            0 -9px 19px #ea580c,
+            0 -14px 29px #ef4444,
+            0 -21px 38px #7f1d1d;
+    }
+}    
+    .top-actions { display: flex; align-items: center; gap: 18px; }
+    .top-actions a, #userEmail, #logoutButton { color: #cbd5e1; font-size: 14px; text-decoration: none; }
+    #logoutButton { border: 0; background: transparent; cursor: pointer; }
+    
+    .workspace { 
+        display: grid; 
+        flex: 1; 
+        min-height: 0; 
+        max-height: calc(100vh - 60px); 
+        grid-template-columns: 250px minmax(0, 1fr); 
+        overflow: hidden; 
+        position: relative;
+    }
+    
+    .sidebar { display: flex; min-height: 0; flex-direction: column; padding: 20px 14px; background: rgba(16, 21, 33, .88); overflow-y: auto; }
+    #newChatButton { width: 100%; padding: 11px 12px; border: 0; border-radius: 7px; background: #20283a; color: #f8fafc; text-align: left; cursor: pointer; flex-shrink: 0; }
+    .sidebar h2 { margin: 24px 8px 10px; color: #94a3b8; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+    
+    #recentChats { overflow-y: auto; display: grid; align-content: start; gap: 4px; }
+    .recent-chat { overflow: hidden; width: 100%; padding: 10px 9px; border: 0; border-radius: 6px; background: transparent; color: #cbd5e1; text-align: left; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+    .recent-chat:hover, .recent-chat.active { background: #20283a; color: #fff; }
+    #recentStatus { margin: 8px; color: #94a3b8; font-size: 12px; }
+    
+    .chat-area { 
+        display: flex; 
+        min-width: 0; 
+        min-height: 0; 
+        flex-direction: column; 
+        padding: 24px clamp(16px, 5vw, 72px) 0 24px; 
+        background: rgba(11, 14, 23, 0.4); 
+        height: 100%;
+        overflow: hidden; 
+    }
+    
+    .chat-title { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-shrink: 0; }
+    .chat-title h1 { margin: 0; font-size: 20px; }
+    #chatQuota, #chatAccessMessage { color: #94a3b8; font-size: 13px; }
+    
+    /* Internal scrollable message list */
+    #chatMessages { 
+        overflow-y: auto; 
+        display: flex; 
+        flex: 1; 
+        min-height: 0; 
+        flex-direction: column; 
+        gap: 18px; 
+        padding: 8px 0 24px; 
+    }
+    
+    .chat-message { max-width: min(760px, 92%); align-self: flex-start; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .chat-message-user { align-self: flex-end; padding: 10px 14px; border-radius: 16px; background: #20283a; }
+    .chat-message-assistant { padding: 2px 0; }
+    
+    .chat-empty { margin: auto; padding: 12px 20px; border-radius: 999px; background: rgba(5, 15, 32, .9); box-shadow: 0 0 28px rgba(34, 211, 238, .12); color: #dbeafe; text-align: center; backdrop-filter: blur(8px); }
+    
+    /* Locked bottom composer box */
+    .composer { 
+        width: 100%; 
+        max-width: 820px; 
+        align-self: center; 
+        padding: 16px 0 20px 0; 
+        background: rgba(11, 14, 23, 0.75); 
+        backdrop-filter: blur(10px);
+        flex-shrink: 0; 
+    }
+    .composer form { display: flex; align-items: flex-end; gap: 10px; padding: 8px; border-radius: 12px; background: #171d2a; }
+    .composer textarea { flex: 1; min-height: 42px; max-height: 180px; resize: vertical; padding: 10px; border: 0; outline: 0; background: transparent; color: #f8fafc; }
+    .composer button { min-width: 76px; padding: 10px 14px; border: 0; border-radius: 8px; background: #3b82f6; color: white; cursor: pointer; }
+    .composer button:disabled { opacity: .45; cursor: not-allowed; }
+    
+    #chatAccessMessage { min-height: 20px; margin: 8px 4px 0; }
+    [hidden] { display: none !important; }
+
+    /* Mobile Responsive Rules */
+    @media (max-width: 650px) {
+        body { height: 100vh; overflow: hidden; }
+        .app { height: 100vh; }
+        .topbar { padding: 0 14px; }
+        
+        #mobileMenuToggle { display: block !important; }
+        
+        .top-actions { gap: 10px; }
+        #userEmail { display: none; }
+        
+        .workspace { grid-template-columns: 1fr; }
+        
+        /* Sidebar slides in as an overlay menu on mobile */
+        .sidebar { 
+            position: absolute; 
+            top: 0; 
+            left: -280px; 
+            width: 260px; 
+            height: 100%; 
+            z-index: 100; 
+            background: #0f172a; 
+            box-shadow: 5px 0 25px rgba(0,0,0,0.8);
+            transition: left 0.3s ease-in-out;
+        }
+        .sidebar.mobile-open {
+            left: 0;
+        }
+        .chat-area { height: 100%; padding: 16px 14px; overflow: hidden; }
+    }
+
+    /* Styling for attachment and mic buttons inside the composer */
+.composer form {
+    display: flex; 
+    align-items: flex-end; 
+    gap: 8px; 
+    padding: 8px 12px; 
+    border-radius: 14px; 
+    background: rgba(23, 29, 42, 0.85); 
+    border: 1px solid rgba(56, 189, 248, 0.3); 
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.1); 
+    backdrop-filter: blur(10px);
+}
+
+.composer-icon-btn {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.composer-icon-btn:hover {
+    background: rgba(56, 189, 248, 0.15);
+    transform: scale(1.1);
+}
+
+#micButton.recording {
+    background: rgba(239, 68, 68, 0.25);
+    animation: micPulse 1.2s infinite alternate;
+}
+
+@keyframes micPulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    100% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+/* Wrapper inside the form that stacks the file chip on top of the textarea */
+.input-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.input-wrapper textarea {
+    width: 100%;
+    min-height: 42px;
+    max-height: 180px;
+    resize: vertical;
+    padding: 8px 4px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #f8fafc;
+}
+
+/* File badge displayed inside the typing box */
+.file-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #e0f2fe;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    margin: 4px 0 2px 4px;
+    max-width: 100%;
+}
+
+.file-chip span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#removeFileBtn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 0 2px;
+    min-width: auto;
+}
+
+#removeFileBtn:hover {
+    color: #f87171;
+}
+</style>
+</head>
+<body>
+    <div class="app">
+        <header class="topbar">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <!-- Mobile Menu Hamburger Button -->
+                <button id="mobileMenuToggle" type="button" aria-label="Toggle Menu" style="background: transparent; border: none; color: #38bdf8; font-size: 22px; cursor: pointer; display: none;">☰</button>
+                <a class="brand" href="#">GEMA AI</a>
+            </div>
+            <nav class="top-actions" aria-label="Account navigation">
+                <a href="/plans.html" id="upgradeLink">Upgrade</a>
+                <span id="userEmail"></span>
+                <button id="logoutButton" type="button">Sign out</button>
+            </nav>
+        </header>
+        <div class="workspace">
+            <aside class="sidebar" aria-label="Chat history">
+                <button id="newChatButton" type="button">+ New chat</button>
+                <h2>Recent chats</h2>
+                <div id="recentChats"></div>
+                <p id="recentStatus" aria-live="polite"></p>
+            </aside>
+            <main class="chat-area">
+                <div class="chat-title">
+                    <h1 id="conversationTitle">New chat</h1>
+                    <p id="chatQuota" aria-live="polite"></p>
+                </div>
+                <div id="chatMessages" role="log" aria-live="polite" aria-relevant="additions">
+                    <p class="chat-empty">What would you like to talk about?</p>
+                </div>
+                <div class="composer">
+    <form id="chatForm">
+        <!-- Hidden file input -->
+        <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.txt,.docx,.js,.py,.html,.css,.json,.md">
+        
+        <!-- Plus Button -->
+        <button id="attachButton" type="button" title="Upload file" class="composer-icon-btn">➕</button>
+        
+        <!-- Microphone Button -->
+        <button id="micButton" type="button" title="Voice note" class="composer-icon-btn">🎤</button>
+        
+        <!-- Inner Column Wrapper: Holds the File Chip + Textarea together inside the box -->
+        <div class="input-wrapper">
+            <div id="fileAttachmentPreview" class="file-chip" style="display: none;">
+                <span id="fileNameText"></span>
+                <button type="button" id="removeFileBtn" title="Remove file">✕</button>
+            </div>
+            <textarea id="chatInput" name="message" rows="1" maxlength="10000" placeholder="Message GEMA AI..." aria-label="Your message" disabled required></textarea>
+        </div>
+
+        <button id="chatSendButton" type="submit" disabled>Send</button>
+    </form>
+    <p id="chatAccessMessage" aria-live="polite"></p>
+</div>
+                </main>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

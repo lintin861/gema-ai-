@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Status - YES AI</title>
+    <style>
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { min-height: 100vh; display: grid; place-items: center; margin: 0; padding: 24px; background: #0b0e17; color: #f8fafc; }
+        main { width: 100%; max-width: 520px; padding: 32px; border: 1px solid rgba(255,255,255,.1); border-radius: 16px; background: #131826; text-align: center; }
+        h1 { margin-bottom: 12px; font-size: 26px; }
+        p { color: #cbd5e1; line-height: 1.6; }
+        a { display: inline-block; margin: 18px 8px 0; color: #93c5fd; }
+        #checkoutStatus { min-height: 48px; }
+        .spinner { width: 34px; height: 34px; margin: 0 auto 18px; border: 3px solid rgba(255,255,255,.2); border-top-color: #3b82f6; border-radius: 50%; animation: spin .8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        [hidden] { display: none !important; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>YES AI Chat Access</h1>
+        <div class="spinner" id="loadingSpinner" aria-hidden="true"></div>
+        <p id="checkoutStatus" aria-live="polite">Checking your payment. Please wait...</p>
+        <div id="checkoutLinks"></div>
+    </main>
+    <script src="checkout.js"></script>
+</body>
+</html>
